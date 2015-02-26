@@ -25,27 +25,28 @@ exports.initialize = function(pathsObj){
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(fileLocation){
+exports.readListOfUrls = function(cb){
   //read the file
-  var theDataz = '';
-  var fileData = fs.createReadStream(fileLocation);
-  fileData.on('data', function(data){
-    theDataz += data;
-  });
-
-  fileData.on('end', function(){
-    return return theDataz.split('\n');
+  var fileData = fs.readFile(exports.paths.list,{encoding: 'utf8'}, function (err, data){
+    cb(data.split('\n'));
   });
 
   //give back list of urls in the file
   //in an Array
 };
-console.log(exports.readListOfUrls('../archives/sites.txt'));
+
 
 
 exports.isUrlInList = function(url){
   //using 2 files
   //web/archives/sites.txt will be websites to get
+  var contents;
+  exports.readListOfUrls(function(list){
+    contents = list;
+  });
+  return contents.reduce(function(acc, elem){
+    return elem === url ? true : acc;
+  }, false);
 
   //read list of urls on above file
   //search throught the returned list to see if we have it or not
@@ -66,11 +67,12 @@ exports.addUrlToList = function(url, res){
 
 };
 
-exports.isURLArchived = function(){
+exports.isURLArchived = function(url){
   //using 2 files
   // /archives/sites.txt will be websites to get
   //read list of urls on above file
   //search throught the returned list to see if we have it or not
+
 
 };
 

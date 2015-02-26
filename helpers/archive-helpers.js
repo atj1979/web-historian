@@ -25,17 +25,55 @@ exports.initialize = function(pathsObj){
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(){
+exports.readListOfUrls = function(fileLocation){
+  //read the file
+  var theDataz = '';
+  var fileData = fs.createReadStream(fileLocation);
+  fileData.on('data', function(data){
+    theDataz += data;
+  });
+
+  fileData.on('end', function(){
+    return return theDataz.split('\n');
+  });
+
+  //give back list of urls in the file
+  //in an Array
+};
+console.log(exports.readListOfUrls('../archives/sites.txt'));
+
+
+exports.isUrlInList = function(url){
+  //using 2 files
+  //web/archives/sites.txt will be websites to get
+
+  //read list of urls on above file
+  //search throught the returned list to see if we have it or not
+
 };
 
-exports.isUrlInList = function(){
-};
+exports.addUrlToList = function(url, res){
+  //parse data to remove 'url='
+  var website =url.slice(4);
+  fs.appendFile(exports.paths.list, website + '\n', function(err) {
+    if(err) {
+      console.log(err);
+    } else {
+      //console.log("The file was saved!");
+      res.end();
+    }
+  });
 
-exports.addUrlToList = function(){
 };
 
 exports.isURLArchived = function(){
+  //using 2 files
+  // /archives/sites.txt will be websites to get
+  //read list of urls on above file
+  //search throught the returned list to see if we have it or not
+
 };
 
 exports.downloadUrls = function(){
+//its tricky
 };

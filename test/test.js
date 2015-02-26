@@ -51,6 +51,8 @@ describe("Node Server Request Listener Function", function() {
     // Request it back.
     var req = new stubs.Request("/" + fixtureName, "GET");
     handler.handleRequest(req, res);
+    console.log("RESPONSE CODE " + res._responseCode);
+    console.log("RESPONSE DATA " + res._data);
 
     waitForThen(
       function() { return res._ended; },

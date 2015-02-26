@@ -1,11 +1,11 @@
 var path = require('path');
 var archive = require('../helpers/archive-helpers');
 var headers = require('./http-helpers');
-var fs = require('fs')
+var fs = require('fs');
 // require more modules/folders here!
-
-exports.handleRequest = function (req, res) {
-  if (req.method === 'GET'){
+//(req, res)
+exports.handleRequest =  {
+  'GETindex': function (req, res){
     res.writeHead(200, headers.headers);
     var fullPage = '';
     var homePage = fs.createReadStream(archive.paths.siteAssets+"/index.html");
@@ -15,28 +15,40 @@ exports.handleRequest = function (req, res) {
     homePage.on('end', function (){
       res.end(fullPage);
     });
-  }
-  if (req.method === 'POST'){
+  },
+
+  'GETpage': function (req, res, url){
+    //if page has been archived, return page else redirect to robot page
+    res.writeHead(200, headers.headers);
+    var fullPage = '';
+    var homePage = fs.createReadStream(archive.paths.archivedSites + '/' + url.slice(4));
+    homePage.on('data', function(data){
+      fullPage+=data;
+    });
+    homePage.on('end', function (){
+      res.end(fullPage);
+    });
+
+
+
+  },
+
+  'POST': function (req, res, data) {
     res.writeHead(201, headers.headers);
-    var incoming = '';
-    req.on('data', function (data) {
-      incoming += data;
+    archive.addUrlToList(data, res);
+    var fullPage = '';
+    var homePage = fs.createReadStream(archive.paths.siteAssets+"/loading.html");
+    homePage.on('data', function(data){
+      fullPage+=data;
     });
-    req.on('end', function () {
-      archive.addUrlToList(incoming, res);
-
-
+    homePage.on('end', function (){
+      res.end(fullPage);
     });
-
-
-
     // req.data.pipe(fs.createWriteStream(archive.paths.list));
     // req.on('end', function(){
     //   res.writeHead(201, headers.headers);
     //   res.end();
     // });
-
-
   }
 
 };

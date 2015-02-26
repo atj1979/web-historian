@@ -27,15 +27,13 @@ exports.initialize = function(pathsObj){
 
 exports.readListOfUrls = function(cb){
   //read the file
-  var fileData = fs.readFile(exports.paths.list,{encoding: 'utf8'}, function (err, data){
+  fs.readFile(exports.paths.list,{encoding: 'utf8'}, function (err, data){
     cb(data.split('\n'));
   });
 
   //give back list of urls in the file
   //in an Array
 };
-
-
 
 exports.isUrlInList = function(url){
   //using 2 files
@@ -68,11 +66,9 @@ exports.addUrlToList = function(url, res){
 };
 
 exports.isURLArchived = function(url){
-  //using 2 files
-  // /archives/sites.txt will be websites to get
-  //read list of urls on above file
-  //search throught the returned list to see if we have it or not
-
+  return (fs.readdirSync(exports.paths.archivedSites).indexOf(url) !== -1);
+  //search sites folder to see if we have it or not
+  //if (url)
 
 };
 
